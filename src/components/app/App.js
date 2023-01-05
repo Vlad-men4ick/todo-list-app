@@ -16,6 +16,26 @@ export default class App extends Component{
         filterStatus: 'All'
     }
 
+
+    componentDidMount() {
+        this.interval = setInterval(() => {
+        this.setState(({ todoData }) => {
+                let newArr = todoData.map(el => {
+                    return el
+                })
+            return {
+                todoData: newArr
+            }
+            })
+        }, 1000)
+    }
+
+    componentWillUnmount() {
+        clearInterval(this.interval)
+    }
+
+
+
     deletedTask = (id) =>{
         this.setState(({todoData}) => {
             const idx = todoData.findIndex((el) => el.id === id);

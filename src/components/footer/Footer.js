@@ -1,12 +1,24 @@
 import { Component } from "react";
+import PropTypes from 'prop-types';
+
 import TaskFilter from "../task-filter/TaskFilter";
 
 import './Footer.css'
 
 export default class Footer extends Component{
 
+    static defaultProps = {
+        filterStatus: 'All',
+        doneCount: 0
+    }
+
+    static propTypes = {
+        filterStatus: PropTypes.string,
+        doneCount: PropTypes.number
+    }
+
     state = {
-        filterStatus: 'All'
+        filterStatus: 1
     }
 
     completedFilter = () => {
@@ -31,6 +43,7 @@ export default class Footer extends Component{
     }
 
     render(){
+
         const {todoData} = this.props.todos
         const {deleteCompleteTask} = this.props
         const doneCount = todoData.reduce((acc ,current) => {

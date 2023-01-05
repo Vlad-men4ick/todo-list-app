@@ -4,10 +4,6 @@ import './NewTaskForm.css'
 
 export default class NewTaskForm extends Component{
 
-    // static defaultProps = {
-
-    // }
-
     state = {
         label: ''
     }
@@ -20,6 +16,10 @@ export default class NewTaskForm extends Component{
 
     onSubmit = (e) => {
         e.preventDefault()
+        if (!isNaN(this.state.label)) {
+            alert('Describe the task in more detail')
+            return
+        }
         this.props.onItemAdded(this.state.label)
         this.setState({
             label: ''

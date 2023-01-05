@@ -9,12 +9,12 @@ export default class Task extends Component{
 
     render(){
         const {label, date, onDeleted, onToggleDone, done} = this.props;
-        let taskTime = formatDistanceToNow(date)
+        let taskTime = formatDistanceToNow(date);
 
 
         let className = ''
         if(done === true){
-            className +='completed'
+            className ='completed'
         }
         let defaultChecked = ''
         if(done === true){
@@ -39,7 +39,7 @@ export default class Task extends Component{
                         />
                     <label>
                         <span className = 'description'>{label}</span>
-                        <span className = 'created'>{taskTime} sec</span>
+                        <span className = 'created'>{taskTime}</span>
                     </label>
                     <button className="icon icon-edit"/>
                     <button 

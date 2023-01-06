@@ -1,73 +1,61 @@
-import { Component } from "react";
-import PropTypes from 'prop-types';
+import TaskFilter from '../task-filter/TaskFilter';
+import { Component } from 'react';
 
-import TaskFilter from "../task-filter/TaskFilter";
+import './Footer.css';
 
-import './Footer.css'
+export default class Footer extends Component {
+  static defaultProps = {
+    filterStatus: 'All',
+    doneCount: 0,
+  };
 
-export default class Footer extends Component{
+  state = {
+    filterStatus: 'All',
+  };
 
-    static defaultProps = {
-        filterStatus: 'All',
-        doneCount: 0
-    }
+  completedFilter = () => {
+    const { getFilterStatusFromFooter } = this.props;
+    this.setState({
+      filterStatus: 'Completed',
+    });
+    getFilterStatusFromFooter('Completed');
+  };
 
-    static propTypes = {
-        filterStatus: PropTypes.string,
-        doneCount: PropTypes.number
-    }
+  allFilter = () => {
+    const { getFilterStatusFromFooter } = this.props;
+    this.setState({
+      filterStatus: 'All',
+    });
+    getFilterStatusFromFooter('All');
+  };
 
-    state = {
-        filterStatus: 1
-    }
+  activeFilter = () => {
+    const { getFilterStatusFromFooter } = this.props;
+    this.setState({
+      filterStatus: 'Active',
+    });
+    getFilterStatusFromFooter('Active');
+  };
 
-    completedFilter = () => {
-        this.setState({
-            filterStatus: 'Completed'
-        })
-        this.props.getFilterStatusFromFooter('Completed')
-    }
+  render() {
+    const { deleteCompleteTask, todos } = this.props;
+    const { filterStatus } = this.state;
 
-    allFilter = () => {
-        this.setState({
-            filterStatus: 'All'
-        })
-        this.props.getFilterStatusFromFooter('All')
-    }
-
-    activeFilter = () => {
-        this.setState({
-            filterStatus: 'Active'
-        })
-        this.props.getFilterStatusFromFooter('Active')
-    }
-
-    render(){
-
-        const {todoData} = this.props.todos
-        const {deleteCompleteTask} = this.props
-        const doneCount = todoData.reduce((acc ,current) => {
-            if(current.done === false){
-                acc++
-            }
-            return acc;
-        }, 0)
-
-        return(
-            <footer className="footer">
-                <span className="todo-count">{doneCount} items left</span>
-                <TaskFilter
-                    todos={this.state}
-                    filterStatus={this.state.filterStatus}
-                    allFilter = {this.allFilter}
-                    activeFilter = {this.activeFilter}
-                    completedFilter = {this.completedFilter}
-                    />
-                <button 
-                    className="clear-completed" 
-                    onClick={deleteCompleteTask}
-                    >Clear completed</button>
-            </footer>
-        )
-    }
+    const doneCount = todos.todoData.reduce((acc, current) => (current.done === false ? acc + 1 : acc), 0);
+    return (
+      <footer className="footer">
+        <span className="todo-count">{doneCount} items left</span>
+        <TaskFilter
+          todos={this.state}
+          filterStatus={filterStatus}
+          allFilter={this.allFilter}
+          activeFilter={this.activeFilter}
+          completedFilter={this.completedFilter}
+        />
+        <button type="button" className="clear-completed" onClick={deleteCompleteTask}>
+          Clear completed
+        </button>
+      </footer>
+    );
+  }
 }

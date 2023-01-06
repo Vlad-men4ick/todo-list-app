@@ -1,42 +1,44 @@
-import { Component } from "react";
+import { Component } from 'react';
 
-import './NewTaskForm.css'
+import './NewTaskForm.css';
 
-export default class NewTaskForm extends Component{
+export default class NewTaskForm extends Component {
+  state = {
+    label: '',
+  };
 
-    state = {
-        label: ''
+  onLabelChange = (e) => {
+    this.setState({
+      label: e.target.value,
+    });
+  };
+
+  onSubmit = (e) => {
+    const { onItemAdded } = this.props;
+    const { label } = this.state;
+    e.preventDefault();
+    if (!Number.isNaN(+label)) {
+      alert('Describe the task in more detail');
+      return;
     }
+    onItemAdded(label);
+    this.setState({
+      label: '',
+    });
+  };
 
-    onLabelChange = (e) => {
-        this.setState({
-            label: e.target.value
-        })
-    }
-
-    onSubmit = (e) => {
-        e.preventDefault()
-        if (!isNaN(this.state.label)) {
-            alert('Describe the task in more detail')
-            return
-        }
-        this.props.onItemAdded(this.state.label)
-        this.setState({
-            label: ''
-        })
-    }
-
-    render(){
-        return(
-            <form onSubmit={this.onSubmit}>
-                <input 
-                className="new-todo"
-                placeholder="What needs to be done?"
-                autoFocus
-                type = 'text'
-                onChange={this.onLabelChange}
-                value={this.state.label}/>
-            </form>
-        )
-    }
+  render() {
+    const { label } = this.state;
+    return (
+      <form onSubmit={this.onSubmit}>
+        <input
+          className="new-todo"
+          placeholder="What needs to be done?"
+          type="text"
+          onChange={this.onLabelChange}
+          value={label}
+        />
+      </form>
+    );
+  }
 }

@@ -1,13 +1,7 @@
-import './style.css'
+import './style.css';
 
-import { createRoot } from 'react-dom/client';
 import App from './components/app/App';
-
-
-
-
-
-
+import { createRoot } from 'react-dom/client';
 
 const root = document.getElementById('root');
-createRoot(root).render(<App/>);
+createRoot(root).render(<App />);

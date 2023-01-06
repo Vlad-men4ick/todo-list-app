@@ -1,6 +1,5 @@
-import { Component } from 'react';
-
 import './NewTaskForm.css';
+import { Component } from 'react';
 
 export default class NewTaskForm extends Component {
   state = {
@@ -13,13 +12,13 @@ export default class NewTaskForm extends Component {
     });
   };
 
-  // eslint-disable-next-line consistent-return
   onSubmit = (e) => {
     const { onItemAdded } = this.props;
     const { label } = this.state;
     e.preventDefault();
     if (!Number.isNaN(+label)) {
       // alert('Describe the task in more detail');
+      return;
     }
     onItemAdded(label);
     this.setState({

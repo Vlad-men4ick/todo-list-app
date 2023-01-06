@@ -13,13 +13,13 @@ export default class NewTaskForm extends Component {
     });
   };
 
+  // eslint-disable-next-line consistent-return
   onSubmit = (e) => {
     const { onItemAdded } = this.props;
     const { label } = this.state;
     e.preventDefault();
     if (!Number.isNaN(+label)) {
-      alert('Describe the task in more detail');
-      return;
+      // alert('Describe the task in more detail');
     }
     onItemAdded(label);
     this.setState({

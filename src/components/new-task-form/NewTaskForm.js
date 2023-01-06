@@ -23,7 +23,7 @@ export default class NewTaskForm extends Component {
     }
     onItemAdded(label);
     this.setState({
-      label:'',
+      label: '',
     });
   };
 

@@ -75,7 +75,7 @@ module.exports = {
     'jsx-a11y/label-has-associated-control': 0,
     'react/react-in-jsx-scope': 'off',
     'react/jsx-props-no-spreading': 'off',
-    'react/static-property-placement': ["error", "static public field"],
+    'react/static-property-placement': ['error', 'static public field'],
     'react/prop-types': 0,
     'react/jsx-filename-extension': [1, { extensions: ['.js', '.jsx'] }],
     indent: ['error', 2],

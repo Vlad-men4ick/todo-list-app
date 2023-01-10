@@ -37,3 +37,11 @@ function Task({ label, date, onDeleted, onToggleDone, done }) {
 }
 
 export default Task;
+Task.defaultProps = {
+  label: '',
+  taskTime: new Date(),
+  className: '',
+  onToggleDone: () => {},
+  defaultChecked: () => {},
+  onDeleted: () => {},
+};

@@ -8,7 +8,12 @@ import { Component } from 'react';
 import './App.css';
 
 export default class App extends Component {
-  // genId = 100;
+  genId = 100;
+
+  static defaultProps = {
+    todoData: [],
+    filterStatus: 'All',
+  };
 
   state = {
     todoData: [],
@@ -45,7 +50,7 @@ export default class App extends Component {
       label: text,
       done: false,
       date: new Date(),
-      id: Math.random(),
+      id: this.genId++,
     };
     this.setState(({ todoData }) => {
       const newArr = [...todoData, newItem];

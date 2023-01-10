@@ -1,13 +1,22 @@
 import TaskFilter from '../task-filter/TaskFilter';
 import { Component } from 'react';
+// import PropTypes from 'prop-types';
 
 import './Footer.css';
 
 export default class Footer extends Component {
   static defaultProps = {
+    getFilterStatusFromFooter: () => {},
+    deleteCompleteTask: () => {},
     filterStatus: 'All',
     doneCount: 0,
+    todos: {},
   };
+
+  // static propTypes = {
+  //   filterStatus: PropTypes.string,
+  //   doneCount: PropTypes.number,
+  // };
 
   state = {
     filterStatus: 'All',

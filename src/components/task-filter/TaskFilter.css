@@ -1,4 +1,5 @@
 .filters {
+  display: flex;
   margin: 0;
   padding: 0;
   list-style: none;
@@ -9,12 +10,12 @@
 .filters li {
   display: inline;
   cursor: default;
+  margin: 0 3px;
 }
 
 .filters li button {
   display: inline-block;
   color: inherit;
-  margin: 3px;
   padding: 3px 7px;
   text-decoration: none;
   border: 1px solid transparent;
@@ -26,6 +27,11 @@
 }
 
 li.selected {
+  display: block;
+  margin: 0;
+  border: 1px solid transparent;
+  border-radius: 3px;
+  border-color: rgba(175, 47, 47, 0.1);
   color: rgb(141, 63, 63);
 }
 

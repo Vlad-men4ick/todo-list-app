@@ -43,3 +43,12 @@ function TaskList({ todos, onDeleted, onToggleDone, filterStatus }) {
 }
 
 export default TaskList;
+
+TaskList.defaultProps = {
+  label: '',
+  taskTime: new Date(),
+  className: '',
+  onToggleDone: () => {},
+  defaultChecked: () => {},
+  onDeleted: () => {},
+};

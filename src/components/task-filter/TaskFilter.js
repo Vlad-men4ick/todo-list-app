@@ -4,12 +4,18 @@ function TaskFilter({ allFilter, activeFilter, completedFilter, filterStatus }) 
   let allBtn = '';
   let activeBtn = '';
   let completedBtn = '';
-  if (filterStatus === 'All') {
-    allBtn = 'selected';
-  } else if (filterStatus === 'Active') {
-    activeBtn = 'selected';
-  } else if (filterStatus === 'Completed') {
-    completedBtn = 'selected';
+
+  switch (filterStatus) {
+    case 'All':
+      allBtn = 'selected';
+      break;
+    case 'Active':
+      activeBtn = 'selected';
+      break;
+    case 'Completed':
+      completedBtn = 'selected';
+      break;
+    default:
   }
   return (
     <ul className="filters">
@@ -31,5 +37,14 @@ function TaskFilter({ allFilter, activeFilter, completedFilter, filterStatus }) 
     </ul>
   );
 }
-
 export default TaskFilter;
+
+TaskFilter.defaultProps = {
+  allBtn: '',
+  activeBtn: '',
+  completedBtn: '',
+  filterStatus: 'All',
+  allFilter: () => {},
+  activeFilter: () => {},
+  completedFilter: () => {},
+};

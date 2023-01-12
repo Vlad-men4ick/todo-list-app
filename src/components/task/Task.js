@@ -1,19 +1,14 @@
 import { formatDistanceToNow } from 'date-fns';
 
+import classNames from 'classnames';
+import PropTypes from 'prop-types';
+
 import './Task.css';
 
 function Task({ label, date, onDeleted, onToggleDone, done }) {
   let taskTime = formatDistanceToNow(date);
-
-  let className = '';
-  if (done === true) {
-    className = 'completed';
-  }
-  let defaultChecked = '';
-  if (done === true) {
-    defaultChecked = true;
-  }
-
+  const className = classNames('', { completed: done });
+  const defaultChecked = classNames('', { defaultChecked: done });
   if (taskTime === 'less than a minute') {
     taskTime = 'created less 30 seconds ago';
   } else if (taskTime.includes('minute')) {
@@ -39,9 +34,18 @@ function Task({ label, date, onDeleted, onToggleDone, done }) {
 export default Task;
 Task.defaultProps = {
   label: '',
-  taskTime: new Date(),
-  className: '',
+  date: new Date(),
+  done: false,
   onToggleDone: () => {},
   defaultChecked: () => {},
   onDeleted: () => {},
+};
+
+Task.propType = {
+  label: PropTypes.string,
+  date: PropTypes.shape(),
+  done: PropTypes.bool,
+  onToggleDone: PropTypes.func,
+  defaultChecked: PropTypes.func,
+  onDeleted: PropTypes.func,
 };

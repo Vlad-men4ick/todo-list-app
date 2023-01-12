@@ -1,9 +1,14 @@
 import './NewTaskForm.css';
 import { Component } from 'react';
+import PropTypes from 'prop-types';
 
 export default class NewTaskForm extends Component {
   static defaultProps = {
-    label: '',
+    onItemAdded: () => {},
+  };
+
+  static propTypes = {
+    onItemAdded: PropTypes.func,
   };
 
   state = {
@@ -20,10 +25,6 @@ export default class NewTaskForm extends Component {
     const { onItemAdded } = this.props;
     const { label } = this.state;
     e.preventDefault();
-    // if (!Number.isNaN(+label)) {
-    //   // alert('Describe the task in more detail'); // вопрос по валидации так как pattern срабатывает после отправки формы
-    //   return;
-    // }
     onItemAdded(label);
     this.setState({
       label: '',
@@ -41,7 +42,7 @@ export default class NewTaskForm extends Component {
           onChange={this.onLabelChange}
           value={label}
           required
-          // pattern="/[^a-zа-яё0-9]/gi, ''"
+          pattern="^(?!\s+$)[\w\W]+"
         />
       </form>
     );

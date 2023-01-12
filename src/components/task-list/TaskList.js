@@ -1,20 +1,9 @@
 import Task from '../task/Task';
+import PropTypes from 'prop-types';
 
 import './TaskList.css';
 
 function TaskList({ todos, onDeleted, onToggleDone, filterStatus }) {
-  const activeFilter = () => {
-    const arr = todos.filter((task) => task.done === false);
-    return arr;
-  };
-  const activArr = activeFilter();
-
-  const compliteFilter = () => {
-    const arr = todos.filter((task) => task.done === true);
-    return arr;
-  };
-  const complitedArr = compliteFilter();
-
   const taskItem = (id, taskProps) => (
     <li key={id}>
       <Task {...taskProps} onDeleted={() => onDeleted(id)} onToggleDone={() => onToggleDone(id)} />
@@ -23,18 +12,22 @@ function TaskList({ todos, onDeleted, onToggleDone, filterStatus }) {
 
   const filterFunc = () => {
     if (filterStatus === 'Active') {
-      return activArr.map((task) => {
-        const { id, ...taskProps } = task;
-        return taskItem(id, taskProps);
-      });
+      return todos
+        .filter((task) => task.done === false)
+        .map((task) => {
+          const { id, ...taskProps } = task;
+          return taskItem(id, taskProps);
+        });
     }
-    if (filterStatus === 'All') {
-      return todos.map((task) => {
-        const { id, ...taskProps } = task;
-        return taskItem(id, taskProps);
-      });
+    if (filterStatus === 'Completed') {
+      return todos
+        .filter((task) => task.done === true)
+        .map((task) => {
+          const { id, ...taskProps } = task;
+          return taskItem(id, taskProps);
+        });
     }
-    return complitedArr.map((task) => {
+    return todos.map((task) => {
       const { id, ...taskProps } = task;
       return taskItem(id, taskProps);
     });
@@ -43,12 +36,16 @@ function TaskList({ todos, onDeleted, onToggleDone, filterStatus }) {
 }
 
 export default TaskList;
-
 TaskList.defaultProps = {
-  label: '',
-  taskTime: new Date(),
-  className: '',
-  onToggleDone: () => {},
-  defaultChecked: () => {},
   onDeleted: () => {},
+  onToggleDone: () => {},
+  todos: [],
+  filterStatus: 'All',
+};
+
+TaskList.propTypes = {
+  onDeleted: PropTypes.func,
+  onToggleDone: PropTypes.func,
+  todos: PropTypes.arrayOf(PropTypes.objectOf),
+  filterStatus: PropTypes.string,
 };

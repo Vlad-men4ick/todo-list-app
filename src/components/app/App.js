@@ -10,11 +10,6 @@ import './App.css';
 export default class App extends Component {
   genId = 100;
 
-  static defaultProps = {
-    todoData: [],
-    filterStatus: 'All',
-  };
-
   state = {
     todoData: [],
     filterStatus: 'All',
@@ -28,7 +23,7 @@ export default class App extends Component {
           todoData: newArr,
         };
       });
-    }, 1000);
+    }, 10000);
   }
 
   componentWillUnmount() {

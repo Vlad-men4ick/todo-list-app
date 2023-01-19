@@ -1,4 +1,7 @@
-.new-todo {
+.todo-form{
+  display: flex;
+}
+.todo-new {
   position: relative;
   margin: 0;
   width: 100%;
@@ -17,4 +20,21 @@
   border: none;
   background: rgba(0, 0, 0, 0.003);
   box-shadow: inset 0 -2px 1px rgba(0, 0, 0, 0.03);
+}
+
+.todo-input-min{
+  width: 20%;
+  padding: 5px 10px 5px 40px;
+  font-size: 24px;
+  outline: none;
+  border: none;
+  border-left: 1px solid rgb(213, 213, 213);
+}
+.todo-input-sec{
+  width: 20%;
+  padding: 5px 10px 5px 40px;
+  font-size: 24px;
+  outline: none;
+  border: none;
+  border-left: 1px solid rgb(213, 213, 213);
 }

@@ -3,10 +3,16 @@ import PropTypes from 'prop-types';
 
 import './TaskList.css';
 
-function TaskList({ todos, onDeleted, onToggleDone, filterStatus }) {
+function TaskList({ todos, onDeleted, onToggleDone, filterStatus, stopTimer, startTimer }) {
   const taskItem = (id, taskProps) => (
     <li key={id}>
-      <Task {...taskProps} onDeleted={() => onDeleted(id)} onToggleDone={() => onToggleDone(id)} />
+      <Task
+        {...taskProps}
+        onDeleted={() => onDeleted(id)}
+        onToggleDone={() => onToggleDone(id)}
+        stopTimer={() => stopTimer(id)}
+        startTimer={() => startTimer(id)}
+      />
     </li>
   );
 
@@ -39,6 +45,8 @@ export default TaskList;
 TaskList.defaultProps = {
   onDeleted: () => {},
   onToggleDone: () => {},
+  startTimer: () => {},
+  stopTimer: () => {},
   todos: [],
   filterStatus: 'All',
 };
@@ -48,4 +56,6 @@ TaskList.propTypes = {
   onToggleDone: PropTypes.func,
   todos: PropTypes.arrayOf(PropTypes.objectOf),
   filterStatus: PropTypes.string,
+  startTimer: PropTypes.func,
+  stopTimer: PropTypes.func,
 };

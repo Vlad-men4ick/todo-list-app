@@ -13,6 +13,8 @@ export default class NewTaskForm extends Component {
 
   state = {
     label: '',
+    min: '',
+    sec: '',
   };
 
   onLabelChange = (e) => {
@@ -21,22 +23,36 @@ export default class NewTaskForm extends Component {
     });
   };
 
-  onSubmit = (e) => {
+  onLabelChangeMin = (e) => {
+    this.setState({
+      min: e.target.value,
+    });
+  };
+
+  onLabelChangeSec = (e) => {
+    this.setState({
+      sec: e.target.value,
+    });
+  };
+
+  onLubmit = (e) => {
     const { onItemAdded } = this.props;
-    const { label } = this.state;
+    const { label, min, sec } = this.state;
     e.preventDefault();
-    onItemAdded(label);
+    onItemAdded(label, parseInt(min, 10) * 60 + parseInt(sec, 10));
     this.setState({
       label: '',
+      min: '',
+      sec: '',
     });
   };
 
   render() {
-    const { label } = this.state;
+    const { label, min, sec } = this.state;
     return (
-      <form onSubmit={this.onSubmit}>
+      <form className="todo-form" onSubmit={(e) => this.onLubmit(e)}>
         <input
-          className="new-todo"
+          className="todo-new"
           placeholder="What needs to be done?"
           type="text"
           onChange={this.onLabelChange}
@@ -44,6 +60,27 @@ export default class NewTaskForm extends Component {
           required
           pattern="^(?!\s+$)[\w\W]+"
         />
+        <input
+          type="text"
+          className="todo-input-min"
+          placeholder="Min"
+          maxLength={2}
+          value={min}
+          required
+          pattern="^[ 0-9]+$"
+          onChange={this.onLabelChangeMin}
+        />
+        <input
+          type="text"
+          className="todo-input-sec"
+          placeholder="Sec"
+          maxLength={2}
+          value={sec}
+          required
+          pattern="^[ 0-9]+$"
+          onChange={this.onLabelChangeSec}
+        />
+        <button aria-label="submit" type="submit" />
       </form>
     );
   }

@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 
 import './Task.css';
 
-function Task({ label, date, onDeleted, onToggleDone, done }) {
+function Task({ label, date, onDeleted, onToggleDone, done, startTimer, stopTimer, time }) {
   let taskTime = formatDistanceToNow(date);
   const className = classNames('', { completed: done });
   const defaultChecked = classNames('', { defaultChecked: done });
@@ -20,10 +20,17 @@ function Task({ label, date, onDeleted, onToggleDone, done }) {
     <div className={className}>
       <div className="view">
         <input className="toggle" type="checkbox" onClick={onToggleDone} defaultChecked={defaultChecked} />
-        <label>
+        <label className="view-container">
           <span className="description">{label}</span>
+          <span className="icon-time">{`${Math.floor(time / 60)
+            .toString()
+            .padStart(2, '0')}:${Math.floor(time % 60)
+            .toString()
+            .padStart(2, '0')}`}</span>
           <span className="created">{taskTime}</span>
         </label>
+        <button type="button" aria-label="start-timer" className="icon icon-play" onClick={startTimer} />
+        <button type="button" aria-label="stop-timer" className="icon-pause" onClick={stopTimer} />
         <span className="icon icon-edit" />
         <button type="button" aria-label="deleted-completed" className="icon icon-destroy" onClick={onDeleted} />
       </div>
@@ -39,6 +46,8 @@ Task.defaultProps = {
   onToggleDone: () => {},
   defaultChecked: () => {},
   onDeleted: () => {},
+  startTimer: () => {},
+  stopTimer: () => {},
 };
 
 Task.propType = {
@@ -48,4 +57,6 @@ Task.propType = {
   onToggleDone: PropTypes.func,
   defaultChecked: PropTypes.func,
   onDeleted: PropTypes.func,
+  startTimer: PropTypes.func,
+  stopTimer: PropTypes.func,
 };

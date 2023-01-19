@@ -2,7 +2,6 @@ import TaskList from '../task-list/TaskList';
 import Header from '../header/Header';
 import Footer from '../footer/Footer';
 import NewTaskForm from '../new-task-form/NewTaskForm';
-
 import { Component } from 'react';
 
 import './App.css';
@@ -18,12 +17,20 @@ export default class App extends Component {
   componentDidMount() {
     this.interval = setInterval(() => {
       this.setState(({ todoData }) => {
-        const newArr = todoData.map((el) => el);
+        const newArr = todoData.map((el) => {
+          if (el.time === 0 || el.done) {
+            return el;
+          }
+          if (!el.pause) {
+            el.time -= 1;
+          }
+          return el;
+        });
         return {
           todoData: newArr,
         };
       });
-    }, 10000);
+    }, 1000);
   }
 
   componentWillUnmount() {
@@ -40,12 +47,13 @@ export default class App extends Component {
     });
   };
 
-  addItem = (text) => {
+  addItem = (text, time) => {
     const newItem = {
       label: text,
       done: false,
       date: new Date(),
       id: this.genId++,
+      time,
     };
     this.setState(({ todoData }) => {
       const newArr = [...todoData, newItem];
@@ -86,6 +94,28 @@ export default class App extends Component {
     }));
   };
 
+  stopTimer = (id) => {
+    this.setState(({ todoData }) => {
+      const idx = todoData.findIndex((el) => el.id === id);
+      const newObj = [{ ...todoData[idx], pause: true }];
+      const newData = [...todoData.slice(0, idx), ...newObj, ...todoData.slice(idx + 1)];
+      return {
+        todoData: newData,
+      };
+    });
+  };
+
+  startTimer = (id) => {
+    this.setState(({ todoData }) => {
+      const idx = todoData.findIndex((el) => el.id === id);
+      const newObj = [{ ...todoData[idx], pause: false }];
+      const newData = [...todoData.slice(0, idx), ...newObj, ...todoData.slice(idx + 1)];
+      return {
+        todoData: newData,
+      };
+    });
+  };
+
   render() {
     const { todoData, filterStatus } = this.state;
     return (
@@ -99,6 +129,8 @@ export default class App extends Component {
             onDeleted={this.deletedTask}
             onToggleDone={this.onToggleDone}
             filterStatus={filterStatus}
+            stopTimer={this.stopTimer}
+            startTimer={this.startTimer}
           />
           <Footer
             todos={this.state}

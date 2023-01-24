@@ -2,144 +2,106 @@ import TaskList from '../task-list/TaskList';
 import Header from '../header/Header';
 import Footer from '../footer/Footer';
 import NewTaskForm from '../new-task-form/NewTaskForm';
-import { Component } from 'react';
+import { useEffect, useState } from 'react';
 
 import './App.css';
 
-export default class App extends Component {
-  genId = 100;
+function App() {
+  const [todoData, setTodoData] = useState([]);
+  const [filterStatus, setFilterStatus] = useState('All');
 
-  state = {
-    todoData: [],
-    filterStatus: 'All',
-  };
-
-  componentDidMount() {
-    this.interval = setInterval(() => {
-      this.setState(({ todoData }) => {
-        const newArr = todoData.map((el) => {
-          if (el.time === 0 || el.done) {
-            return el;
-          }
-          if (!el.pause) {
-            el.time -= 1;
-          }
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const newArr = todoData.map((el) => {
+        if (el.time === 0 || el.done) {
           return el;
-        });
-        return {
-          todoData: newArr,
-        };
+        }
+        if (!el.pause) {
+          el.time -= 1;
+        }
+        return el;
       });
+      setTodoData(newArr);
     }, 1000);
-  }
+    return () => clearInterval(interval);
+  });
 
-  componentWillUnmount() {
-    clearInterval(this.interval);
-  }
-
-  deletedTask = (id) => {
-    this.setState(({ todoData }) => {
-      const idx = todoData.findIndex((el) => el.id === id);
-      const newArr = [...todoData.slice(0, idx), ...todoData.slice(idx + 1)];
-      return {
-        todoData: newArr,
-      };
-    });
+  const deletedTask = (id) => {
+    const idx = todoData.findIndex((el) => el.id === id);
+    const newArr = [...todoData.slice(0, idx), ...todoData.slice(idx + 1)];
+    setTodoData(newArr);
   };
 
-  addItem = (text, time) => {
+  const addItem = (text, time) => {
     const newItem = {
       label: text,
       done: false,
       date: new Date(),
-      id: this.genId++,
+      id: Date.now().toString(),
       time,
     };
-    this.setState(({ todoData }) => {
-      const newArr = [...todoData, newItem];
-      return {
-        todoData: newArr,
-      };
-    });
+    const newArr = [...todoData, newItem];
+    setTodoData(newArr);
   };
 
-  onToggleDone = (id) => {
-    this.setState(({ todoData }) => {
-      const idx = todoData.findIndex((el) => el.id === id);
-      const newObj = [
-        {
-          ...todoData[idx],
-          done: !todoData[idx].done,
-        },
-      ];
-      const newData = [...todoData.slice(0, idx), ...newObj, ...todoData.slice(idx + 1)];
-      return {
-        todoData: newData,
-      };
-    });
+  const onToggleDone = (id) => {
+    const idx = todoData.findIndex((el) => el.id === id);
+    const newObj = [
+      {
+        ...todoData[idx],
+        done: !todoData[idx].done,
+      },
+    ];
+    const newData = [...todoData.slice(0, idx), ...newObj, ...todoData.slice(idx + 1)];
+    setTodoData(newData);
   };
 
-  deleteCompleteTask = () => {
-    this.setState(({ todoData }) => {
-      const doneTask = todoData.filter((el) => el.done === false);
-      return {
-        todoData: doneTask,
-      };
-    });
+  const deleteCompleteTask = () => {
+    const doneTask = todoData.filter((el) => el.done === false);
+    setTodoData(doneTask);
   };
 
-  getFilterStatusFromFooter = (status) => {
-    this.setState(() => ({
-      filterStatus: status,
-    }));
+  const getFilterStatusFromFooter = (status) => {
+    setFilterStatus(status);
   };
 
-  stopTimer = (id) => {
-    this.setState(({ todoData }) => {
-      const idx = todoData.findIndex((el) => el.id === id);
-      const newObj = [{ ...todoData[idx], pause: true }];
-      const newData = [...todoData.slice(0, idx), ...newObj, ...todoData.slice(idx + 1)];
-      return {
-        todoData: newData,
-      };
-    });
+  const stopTimer = (id) => {
+    const idx = todoData.findIndex((el) => el.id === id);
+    const newObj = [{ ...todoData[idx], pause: true }];
+    const newData = [...todoData.slice(0, idx), ...newObj, ...todoData.slice(idx + 1)];
+    setTodoData(newData);
   };
 
-  startTimer = (id) => {
-    this.setState(({ todoData }) => {
-      const idx = todoData.findIndex((el) => el.id === id);
-      const newObj = [{ ...todoData[idx], pause: false }];
-      const newData = [...todoData.slice(0, idx), ...newObj, ...todoData.slice(idx + 1)];
-      return {
-        todoData: newData,
-      };
-    });
+  const startTimer = (id) => {
+    const idx = todoData.findIndex((el) => el.id === id);
+    const newObj = [{ ...todoData[idx], pause: false }];
+    const newData = [...todoData.slice(0, idx), ...newObj, ...todoData.slice(idx + 1)];
+    setTodoData(newData);
   };
 
-  render() {
-    const { todoData, filterStatus } = this.state;
-    return (
-      <section className="todoapp">
-        <Header>
-          <NewTaskForm onItemAdded={this.addItem} />
-        </Header>
-        <section className="main">
-          <TaskList
-            todos={todoData}
-            onDeleted={this.deletedTask}
-            onToggleDone={this.onToggleDone}
-            filterStatus={filterStatus}
-            stopTimer={this.stopTimer}
-            startTimer={this.startTimer}
-          />
-          <Footer
-            todos={this.state}
-            filterStatus={filterStatus}
-            deleteCompleteTask={() => this.deleteCompleteTask()}
-            getFilterStatusFromFooter={this.getFilterStatusFromFooter}
-          />
-        </section>
+  return (
+    <section className="todoapp">
+      <Header>
+        <NewTaskForm onItemAdded={addItem} />
+      </Header>
+      <section className="main">
+        <TaskList
+          todos={todoData}
+          onDeleted={deletedTask}
+          onToggleDone={onToggleDone}
+          filterStatus={filterStatus}
+          stopTimer={stopTimer}
+          startTimer={startTimer}
+        />
+        <Footer
+          todos={{ todoData, filterStatus }}
+          filterStatus={filterStatus}
+          deleteCompleteTask={deleteCompleteTask}
+          getFilterStatusFromFooter={getFilterStatusFromFooter}
+        />
       </section>
-    );
-  }
+    </section>
+  );
 }
+
+export default App;

@@ -1,5 +1,4 @@
 import { formatDistanceToNow } from 'date-fns';
-
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
 

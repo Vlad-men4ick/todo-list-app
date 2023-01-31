@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import TaskList from '../task-list/TaskList';
 import Header from '../header/Header';
 import Footer from '../footer/Footer';
@@ -10,21 +11,24 @@ function App() {
   const [todoData, setTodoData] = useState([]);
   const [filterStatus, setFilterStatus] = useState('All');
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      const newArr = todoData.map((el) => {
-        if (el.time === 0 || el.done) {
-          return el;
-        }
-        if (!el.pause) {
-          el.time -= 1;
-        }
+  const interval = setInterval(() => {
+    const newArr = todoData.map((el) => {
+      if (el.time === 0 || el.done) {
         return el;
-      });
-      setTodoData(newArr);
-    }, 1000);
-    return () => clearInterval(interval);
-  });
+      }
+      if (!el.pause) {
+        el.time -= 1;
+      }
+      return el;
+    });
+    setTodoData(() => newArr);
+  }, 1000);
+
+  useEffect(() => {
+    setTodoData(todoData);
+  }, []);
+
+  useEffect(() => () => clearInterval(interval));
 
   const deletedTask = (id) => {
     const idx = todoData.findIndex((el) => el.id === id);
@@ -40,8 +44,7 @@ function App() {
       id: Date.now().toString(),
       time,
     };
-    const newArr = [...todoData, newItem];
-    setTodoData(newArr);
+    setTodoData((prevState) => [...prevState, newItem]);
   };
 
   const onToggleDone = (id) => {

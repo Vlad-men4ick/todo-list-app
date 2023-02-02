@@ -12,16 +12,18 @@ function App() {
   const [filterStatus, setFilterStatus] = useState('All');
 
   const interval = setInterval(() => {
-    const newArr = todoData.map((el) => {
-      if (el.time === 0 || el.done) {
+    setTodoData((todoItems) => {
+      const newArr = todoItems.map((el) => {
+        if (el.time === 0 || el.done) {
+          return el;
+        }
+        if (!el.pause) {
+          el.time -= 1;
+        }
         return el;
-      }
-      if (!el.pause) {
-        el.time -= 1;
-      }
-      return el;
+      });
+      return newArr;
     });
-    setTodoData(() => newArr);
   }, 1000);
 
   useEffect(() => {
@@ -31,9 +33,11 @@ function App() {
   useEffect(() => () => clearInterval(interval));
 
   const deletedTask = (id) => {
-    const idx = todoData.findIndex((el) => el.id === id);
-    const newArr = [...todoData.slice(0, idx), ...todoData.slice(idx + 1)];
-    setTodoData(newArr);
+    setTodoData((todoItems) => {
+      const idx = todoItems.findIndex((el) => el.id === id);
+      const newArr = [...todoItems.slice(0, idx), ...todoItems.slice(idx + 1)];
+      return newArr;
+    });
   };
 
   const addItem = (text, time) => {
@@ -48,38 +52,46 @@ function App() {
   };
 
   const onToggleDone = (id) => {
-    const idx = todoData.findIndex((el) => el.id === id);
-    const newObj = [
-      {
-        ...todoData[idx],
-        done: !todoData[idx].done,
-      },
-    ];
-    const newData = [...todoData.slice(0, idx), ...newObj, ...todoData.slice(idx + 1)];
-    setTodoData(newData);
+    setTodoData((todoItems) => {
+      const idx = todoItems.findIndex((el) => el.id === id);
+      const newObj = [
+        {
+          ...todoItems[idx],
+          done: !todoItems[idx].done,
+        },
+      ];
+      const newData = [...todoItems.slice(0, idx), ...newObj, ...todoItems.slice(idx + 1)];
+      return newData;
+    });
   };
 
   const deleteCompleteTask = () => {
-    const doneTask = todoData.filter((el) => el.done === false);
-    setTodoData(doneTask);
+    setTodoData((todoItems) => {
+      const doneTask = todoItems.filter((el) => el.done === false);
+      return doneTask;
+    });
   };
 
   const getFilterStatusFromFooter = (status) => {
-    setFilterStatus(status);
+    setFilterStatus(() => status);
   };
 
   const stopTimer = (id) => {
-    const idx = todoData.findIndex((el) => el.id === id);
-    const newObj = [{ ...todoData[idx], pause: true }];
-    const newData = [...todoData.slice(0, idx), ...newObj, ...todoData.slice(idx + 1)];
-    setTodoData(newData);
+    setTodoData((todoItems) => {
+      const idx = todoItems.findIndex((el) => el.id === id);
+      const newObj = [{ ...todoItems[idx], pause: true }];
+      const newData = [...todoItems.slice(0, idx), ...newObj, ...todoItems.slice(idx + 1)];
+      return newData;
+    });
   };
 
   const startTimer = (id) => {
-    const idx = todoData.findIndex((el) => el.id === id);
-    const newObj = [{ ...todoData[idx], pause: false }];
-    const newData = [...todoData.slice(0, idx), ...newObj, ...todoData.slice(idx + 1)];
-    setTodoData(newData);
+    setTodoData((todoItems) => {
+      const idx = todoItems.findIndex((el) => el.id === id);
+      const newObj = [{ ...todoItems[idx], pause: false }];
+      const newData = [...todoItems.slice(0, idx), ...newObj, ...todoItems.slice(idx + 1)];
+      return newData;
+    });
   };
 
   return (
